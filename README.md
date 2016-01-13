@@ -5,14 +5,14 @@
 Background
 ---
 
-We <3 Promise and functional programming.
+We love Promise and functional programming.
 
 But having multiple `.then()` makes code difficult to read and hard to reuse. `promise-pipe` is targeted to solve both issues in an elegant way.
 
 Usage
 ---
 
-In the old days, you write,
+In the old days, you would write
 
 ```js
 new Promise(
@@ -35,14 +35,12 @@ First, we build a pipe with two actions, `readFile`, and `decodeBuffer`.
 ```js
 const pipe = require('promise-pipe')({
   readFile: filename =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve, reject) =>
       fs.readFile(
         filename,
-        (err, buffer) => {
-          err ? reject(err) : resolve(buffer);
-        }
-      );
-    }),
+        (err, buffer) => err ? reject(err) : resolve(buffer)
+      )
+    ),
   decodeBuffer: (buffer, encoding) => buffer.toString(encoding)
 });
 ```
@@ -70,15 +68,15 @@ When actions are called, they return a new Promise object decorated with actions
   then: function () { ... }, // native Promise function
   catch: function () { ... }, // native Promise function
   readFile: function () {
-    let promise = new Promise((resolve, reject) => {
+    let promise = new Promise((resolve, reject) =>
       this
-        .then(output => {
-          fs.readFile(output, (err, buffer) {
-            err ? reject(err) : resolve(buffer);
-          })
-        })
-        .catch(reject);
-    });
+        .then(output =>
+          fs.readFile(output, (err, buffer) =>
+            err ? reject(err) : resolve(buffer)
+          )
+        )
+        .catch(reject)
+    );
 
     // Recursively decorate the new Promise object
     promise.readFile = ...
