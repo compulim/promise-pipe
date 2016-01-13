@@ -1,0 +1,25 @@
+{
+  "name": "promise-pipe",
+  "version": "0.0.1",
+  "description": "Chain promises in an elegant way",
+  "keywords": [
+    "promise",
+    "pipe",
+    "chain",
+    "async"
+  ],
+  "license": "MIT",
+  "email": "william.wong@candrholdings.com",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/candrholdings/promise-pipe.git"
+  },
+  "scripts": {
+    "test": "mocha test/*-test.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  }
+}
