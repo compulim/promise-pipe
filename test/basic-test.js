@@ -33,4 +33,29 @@ describe('A pipe to read file', () => {
       }).catch(done);
     });
   });
+
+  describe('when run in two parts', () => {
+    const firstPromise =
+      pipe(module.filename)
+        .readFile();
+
+    const secondPromise =
+      firstPromise
+        .decodeBuffer('utf8');
+
+    it('should returns Buffer in first part', done => {
+      firstPromise.then(buffer => {
+        assert(buffer instanceof Buffer);
+        done();
+      });
+    });
+
+    it('should returns string in second part', done => {
+      secondPromise.then(text => {
+        assert(typeof text === 'string');
+        assert(/^'use strict';/.test(text));
+        done();
+      }).catch(done);
+    });
+  });
 });
