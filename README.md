@@ -9,7 +9,7 @@ We <3 Promise and functional programming.
 
 But having multiple `.then()` makes code difficult to read and hard to reuse. `promise-pipe` is targeted to solve both issues in an elegant way.
 
-Use it
+Usage
 ---
 
 In the old days, you write,
@@ -47,7 +47,7 @@ const pipe = require('promise-pipe')({
 });
 ```
 
-Then we use this pipe with different input arguments. For example, we want to read from `input.txt` with `utf8` encoding.
+Then we use this pipe with different input arguments. For example, we want to read from `"input.txt"` with `"utf8"` encoding.
 
 ```js
 pipe('input.txt')
@@ -56,9 +56,9 @@ pipe('input.txt')
   .then(text => console.log(text));
 ```
 
-Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. Since we first initialize the pipe with `input.txt`, the first `.readFile()` call will receive `'input.txt'` as its `filename` argument.
+Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. Since we first initialize the pipe with `input.txt`, the first `.readFile()` call will receive `"input.txt"` as its `filename` argument.
 
-Similar, in `decodeBuffer(buffer, encoding)` action, `buffer` is the Node.js Buffer received thru `fs.readFile` call after completing `readFile` action. In addition to `buffer`, pipe caller can also specify `encoding` argument. This allow pipe to be easily customizable.
+Similar, in `decodeBuffer(buffer, encoding)` action, `buffer` is the Node.js Buffer received thru `fs.readFile` call after completing `readFile` action. In addition to passing last result `buffer`, pipe caller can also specify `encoding` argument (`"utf8"`). This allow pipe to be easily customizable.
 
 How it works
 ---
@@ -93,7 +93,7 @@ When actions are called, they return a new Promise object decorated with actions
 ES6 Promise
 ---
 
-By default, `promise-pipe` use ES6 Promise interface, i.e. global `Promise` object. You can specify your favorite Promise library thru options, for example,
+By default, `promise-pipe` use your global `Promise` object, probably ES6. You can specify your favorite Promise library thru `options` as long as their Promise instance has `.then()` and `.catch()` functions, for example,
 
 ```js
 const pipe = require('promise-pipe')({
