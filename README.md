@@ -54,14 +54,14 @@ pipe('input.txt')
   .then(text => console.log(text));
 ```
 
-Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. Since we first initialize the pipe with `input.txt`, the first `.readFile()` call will receive `"input.txt"` as its `filename` argument.
+Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. Since we first initialize the pipe with `"input.txt"`, the first `.readFile()` call will receive `"input.txt"` as its `filename` argument.
 
 Similar, in `decodeBuffer(buffer, encoding)` action, `buffer` is the Node.js Buffer received thru `fs.readFile` call after completing `readFile` action. In addition to passing last result `buffer`, pipe caller can also specify `encoding` argument (`"utf8"`). This allow pipe to be easily customizable.
 
 How it works
 ---
 
-When actions are called, they return a new Promise object decorated with actions. For example, `pipe('input.txt').readFile()` will returns a Promise object like this,
+When actions are called, they return a new Promise object decorated with actions. For example, `pipe('input.txt').readFile()` will returns a Promise object similar to this.
 
 ```js
 {
@@ -91,7 +91,7 @@ When actions are called, they return a new Promise object decorated with actions
 ES6 Promise
 ---
 
-By default, `promise-pipe` use your global `Promise` object, probably ES6. You can specify your favorite Promise library thru `options` as long as their Promise instance has `.then()` and `.catch()` functions, for example,
+By default, `promise-pipe` use your global `Promise` object, probably ES6. You can specify your favorite Promise library thru `options` as long as instance of the Promise has `.then()` and `.catch()` functions, for example,
 
 ```js
 const pipe = require('promise-pipe')({
