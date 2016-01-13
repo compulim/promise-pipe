@@ -1,36 +1,39 @@
 'use strict';
 
+const FUNCTION = 'function';
+
 module.exports = function (actions, options) {
   options = Object.assign({ Promise: Promise }, options);
 
-  return input => {
-    const promise = new options.Promise(resolve => resolve(input));
-
-    return decoratePromise(promise, actions, options);
-  }
+  return input => decoratePromise(new options.Promise(resolve => resolve(input)), actions, options);
 };
 
 function decoratePromise(promise, actions, options) {
+  const Promise = options.Promise;
+
   Object.keys(actions).forEach(name => {
     promise[name] = function () {
       const args = [].slice.call(arguments);
 
-      const newPromise = new options.Promise((resolve, reject) => {
-        promise.then(output => {
-          args.unshift(output);
+      return decoratePromise(
+        new Promise((resolve, reject) =>
+          promise
+            .then(output => {
+              args.unshift(output);
 
-          const result = actions[name].apply(null, args);
+              const result = actions[name].apply(null, args);
 
-          if (isPromise(result)) {
-            result.then(resolve, reject);
-          } else {
-            resolve(result);
-          }
-        })
-        .catch(reject);
-      });
-
-      return decoratePromise(newPromise, actions, options);
+              if (isPromise(result)) {
+                result.then(resolve, reject);
+              } else {
+                resolve(result);
+              }
+            })
+            .catch(reject)
+        ),
+        actions,
+        options
+      );
     };
   });
 
@@ -38,5 +41,5 @@ function decoratePromise(promise, actions, options) {
 };
 
 function isPromise(obj) {
-  return typeof obj.then === 'function';
+  return typeof obj.then === FUNCTION && typeof obj.catch === FUNCTION;
 }
