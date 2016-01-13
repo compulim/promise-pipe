@@ -7,11 +7,11 @@ const
 
 describe('A pipe to read file', () => {
   const pipe = createPipe({
-    readFile: filename => new Promise((resolve, reject) => {
-      fs.readFile(filename, (err, buffer) => {
-        err ? reject(err) : resolve(buffer);
-      });
-    }),
+    readFile: filename => new Promise((resolve, reject) =>
+      fs.readFile(filename, (err, buffer) =>
+        err ? reject(err) : resolve(buffer)
+      )
+    ),
     decodeBuffer: (buffer, encoding) => buffer.toString(encoding)
   });
 
