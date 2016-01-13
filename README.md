@@ -12,7 +12,7 @@ But having multiple `.then()` makes code difficult to read and hard to reuse. `p
 Usage
 ---
 
-In the old days, you would write
+In the old days, you would write the following code.
 
 ```js
 new Promise(
