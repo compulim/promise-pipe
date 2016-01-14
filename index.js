@@ -41,20 +41,20 @@ function decoratePromise(promise, decorators, options) {
     promise[name] = decorators[name].bind(promise);
   });
 
-  const
-    originalThen = promise.then,
-    originalCatch = promise.catch;
+  const modifier = result => decoratePromise(result, decorators, options);
 
-  promise.then = function () {
-    return decoratePromise(originalThen.apply(this, arguments), decorators, options);
-  };
-
-  promise.catch = function () {
-    return decoratePromise(originalCatch.apply(this, arguments), decorators, options);
-  };
+  ['catch', 'then'].forEach(name => {
+    promise[name] = intervene(promise[name], modifier);
+  });
 
   return promise;
 };
+
+function intervene(fn, modifier) {
+  return function () {
+    return modifier(fn.apply(this, arguments));
+  };
+}
 
 function isPromise(obj) {
   return obj && typeof obj.then === FUNCTION && typeof obj.catch === FUNCTION;

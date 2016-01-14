@@ -55,7 +55,7 @@ describe('A pipe to read file', () => {
     });
   });
 
-  describe('when run with then() in between', () => {
+  describe('when run with catch()/then() in between', () => {
     const promise =
       pipe(module.filename)
         .readFile()
