@@ -64,7 +64,7 @@ Then, `readFile()` returned a `Buffer` object and it will then passed (or piped)
 How it works
 ---
 
-When actions are called, they return a new Promise object decorated with actions. For example, `pipe('input.txt').readFile()` will returns a Promise object similar to this.
+When actions are called, a new Promise object decorated with actions will be returned. For example, `pipe('input.txt').readFile()` will return a Promise object similar to this.
 
 ```js
 {
