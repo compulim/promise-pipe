@@ -59,7 +59,7 @@ pipe('input.txt')
 
 Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. First, we initialize the pipe with `"input.txt"`, thus, the first `readFile()` action will receive `"input.txt"` as its `filename` argument.
 
-Then, `readFile()` returned a `Buffer` object and it will then passed (or piped) into `decodeBuffer` action. In addition to `Buffer` object, we also appended `"utf8"` into the call and become `encoding` argument.
+Then, `readFile()` returned a `Buffer` object and it will then passed (or piped) into `decodeBuffer` action. In addition to `Buffer` object, we also appended `"utf8"` into the `decodeBuffer` call and it become `encoding` argument.
 
 How it works
 ---
