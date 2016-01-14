@@ -43,7 +43,7 @@ describe('A pipe to read file', () => {
       firstPromise.then(buffer => {
         assert(buffer instanceof Buffer);
         done();
-      });
+      }).catch(done);
     });
 
     it('should returns string in second part', done => {
