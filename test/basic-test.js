@@ -21,7 +21,7 @@ describe('A pipe to read file', () => {
         .readFile()
         .decodeBuffer('utf8');
 
-    it('should returns no error', done => {
+    it('should returns no errors', done => {
       promise.then(() => done()).catch(done);
     });
 
