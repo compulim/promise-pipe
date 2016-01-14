@@ -2,16 +2,17 @@
 
 const
   createPipe = require('../index'),
-  assert = require('assert'),
-  ERROR = new Error();
+  assert = require('assert');
 
 describe('A pipe which throw error inside Promise', () => {
-  const pipe = createPipe({
-    throwAsync: () =>
-      new Promise((resolve, reject) => {
-        throw ERROR;
-      })
-  });
+  const
+    ERROR = new Error(),
+    pipe = createPipe({
+      throwAsync: () =>
+        new Promise((resolve, reject) => {
+          throw ERROR;
+        })
+    });
 
   describe('when run', () => {
     const promise = pipe().throwAsync();

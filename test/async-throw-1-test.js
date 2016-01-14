@@ -2,16 +2,17 @@
 
 const
   createPipe = require('../index'),
-  assert = require('assert'),
-  ERROR = new Error();
+  assert = require('assert');
 
 describe('A pipe which reject asynchronously', () => {
-  const pipe = createPipe({
-    throwAsync: () =>
-      new Promise((resolve, reject) =>
-        reject(ERROR)
-      )
-  });
+  const
+    ERROR = new Error(),
+    pipe = createPipe({
+      throwAsync: () =>
+        new Promise((resolve, reject) =>
+          reject(ERROR)
+        )
+    });
 
   describe('when run', () => {
     const promise = pipe().throwAsync();

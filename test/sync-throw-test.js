@@ -2,15 +2,16 @@
 
 const
   createPipe = require('../index'),
-  assert = require('assert'),
-  ERROR = new Error();
+  assert = require('assert');
 
 describe('A pipe which throw error synchronously', () => {
-  const pipe = createPipe({
-    throwSync: () => {
-      throw ERROR;
-    }
-  });
+  const
+    ERROR = new Error(),
+    pipe = createPipe({
+      throwSync: () => {
+        throw ERROR;
+      }
+    });
 
   describe('when run', () => {
     const promise = pipe().throwSync();
