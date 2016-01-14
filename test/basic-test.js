@@ -15,7 +15,7 @@ describe('A pipe to read file', () => {
     decodeBuffer: (buffer, encoding) => buffer.toString(encoding)
   });
 
-  describe('when run asynchronously', () => {
+  describe('when run in full', () => {
     const promise =
       pipe(module.filename)
         .readFile()
@@ -35,13 +35,9 @@ describe('A pipe to read file', () => {
   });
 
   describe('when run in two parts', () => {
-    const firstPromise =
-      pipe(module.filename)
-        .readFile();
-
-    const secondPromise =
-      firstPromise
-        .decodeBuffer('utf8');
+    const
+      firstPromise = pipe(module.filename).readFile(),
+      secondPromise = firstPromise.decodeBuffer('utf8');
 
     it('should returns Buffer in first part', done => {
       firstPromise.then(buffer => {

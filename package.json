@@ -20,6 +20,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "q": "^1.4.1"
   }
 }
