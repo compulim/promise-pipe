@@ -54,4 +54,32 @@ describe('A pipe to read file', () => {
       }).catch(done);
     });
   });
+
+  describe('when run with then() in between', () => {
+    const promise =
+      pipe(module.filename)
+        .readFile()
+        .then(buffer => {
+          assert(buffer instanceof Buffer);
+
+          return buffer;
+        })
+        .catch(err => {
+          assert(!err);
+          throw err;
+        })
+        .decodeBuffer('utf8');
+
+    it('should returns no errors', done => {
+      promise.then(() => done()).catch(done);
+    });
+
+    it('should returns text content', done => {
+      promise.then(text => {
+        assert(typeof text === 'string');
+        assert(/^'use strict';/.test(text));
+        done();
+      }).catch(done);
+    });
+  });
 });

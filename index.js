@@ -41,6 +41,18 @@ function decoratePromise(promise, decorators, options) {
     promise[name] = decorators[name].bind(promise);
   });
 
+  const
+    originalThen = promise.then,
+    originalCatch = promise.catch;
+
+  promise.then = function () {
+    return decoratePromise(originalThen.apply(this, arguments), decorators, options);
+  };
+
+  promise.catch = function () {
+    return decoratePromise(originalCatch.apply(this, arguments), decorators, options);
+  };
+
   return promise;
 };
 
