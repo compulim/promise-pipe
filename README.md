@@ -30,7 +30,10 @@ The code is not easy to read or reusable.
 
 With `promise-pipe`, you can chain your Promise actions and make them reusable.
 
-First, we build a pipe with two actions, `readFile`, and `decodeBuffer`.
+First, we build a pipe with two actions:
+
+* `readFile(filename)` will read file `filename` and return content as `Buffer` asynchronously
+* `decodeBuffer(buffer, encoding)` will decode `Buffer` into `string` synchronously
 
 ```js
 const pipe = require('promise-pipe')({
@@ -45,7 +48,7 @@ const pipe = require('promise-pipe')({
 });
 ```
 
-Then we use this pipe with different input arguments. For example, we want to read from `"input.txt"` with `"utf8"` encoding.
+Then we use this pipe with different input arguments. For example, we will read from `"input.txt"` with `"utf8"` encoding.
 
 ```js
 pipe('input.txt')
@@ -54,9 +57,9 @@ pipe('input.txt')
   .then(text => console.log(text));
 ```
 
-Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. Since we first initialize the pipe with `"input.txt"`, the first `.readFile()` call will receive `"input.txt"` as its `filename` argument.
+Analogous to waterfall pattern, first argument of every pipe action is the result from the last action. First, we initialize the pipe with `"input.txt"`, thus, the first `readFile()` action will receive `"input.txt"` as its `filename` argument.
 
-Similar, in `decodeBuffer(buffer, encoding)` action, `buffer` is the Node.js Buffer received thru `fs.readFile` call after completing `readFile` action. In addition to passing last result `buffer`, pipe caller can also specify `encoding` argument (`"utf8"`). This allow pipe to be easily customizable.
+Then, `readFile()` returned a `Buffer` object and it will then passed (or piped) into `decodeBuffer` action. In addition to `Buffer` object, we also appended `"utf8"` into the call and become `encoding` argument.
 
 How it works
 ---
@@ -68,38 +71,50 @@ When actions are called, they return a new Promise object decorated with actions
   then: function () { ... }, // native Promise function
   catch: function () { ... }, // native Promise function
   readFile: function () {
-    let promise = new Promise((resolve, reject) =>
-      this
-        .then(output =>
-          fs.readFile(output, (err, buffer) =>
-            err ? reject(err) : resolve(buffer)
-          )
-        )
-        .catch(reject)
-    );
-
-    // Recursively decorate the new Promise object
-    promise.readFile = ...
-    promise.decodeBuffer = ...
-
-    return promise;
+    // When the current Promise is resolved, call fs.readFile and return a new Promise
+    // The new Promise instance will also decorate with readFile and decodeBuffer
   },
   decodeBuffer: function () { ... }
 }
 ```
 
-ES6 Promise
+When we create the pipe, all actions are converted into decorators. To save memory footprint, these decorators will be reused across multiple Promise objects, we use `function.bind()` to make sure these decorators are resolving their respective Promise object.
+
+Options
+===
+
+Using Promise other than ES6 Promise
 ---
 
-By default, `promise-pipe` use your global `Promise` object, probably ES6. You can specify your favorite Promise library thru `options` as long as instance of the Promise has `.then()` and `.catch()` functions, for example,
+By default, `promise-pipe` use your global `Promise` object, which is probably ES6 native Promise interface. You can specify your favorite Promise library thru `options.Promise`. Your Promise library should has both `.then()` and `.catch()` functions. The example below shows we use [Q](http://npmjs.org/package/q) as Promise library.
 
 ```js
 const pipe = require('promise-pipe')({
   // your actions
 }, {
-  Promise: require('q')
+  Promise: require('q').Promise
 });
 ```
+
+When the pipe is created by calling `pipe()`, the Promise object returned will be instance of `Q.makePromise`. See [custom-promise-test.js](tree/master/test/custom-promise-test.js) for details.
+
+Context
+---
+
+If you want the action to run under different "`this`" context, you can specify it in `options.context`.
+
+```js
+const pipe = require('promise-pipe')({
+  getContext: function () {
+    return this;
+  }
+}, {
+  context: { hello: 'World!' }
+});
+```
+
+When `pipe().getContext()` is resolved, it will return `{ hello: 'World!' }`. Note that actions defined with ES6 arrow function do not support "`this`". See [context-test.js](tree/master/test/context-test.js) for details.
+
 
 Contribution
 ---
