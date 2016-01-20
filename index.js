@@ -8,10 +8,10 @@ module.exports = function (actions, options) {
   const
     PromiseClass = options.Promise,
     context = options.context,
-    decorators = mapMap(actions, (action, name) => function () {
+    decorators = select(actions, (action, name) => function () {
       const
         that = this,
-        args = makeArray(arguments),
+        args = [].slice.call(arguments),
         action = actions[name];
 
       return decoratePromise(
@@ -20,7 +20,7 @@ module.exports = function (actions, options) {
             .then(output => {
               const result = action.apply(context, [output].concat(args));
 
-              if (isPromise(result)) {
+              if (thenable(result)) {
                 result.then(resolve, reject);
               } else {
                 resolve(result);
@@ -56,18 +56,14 @@ function intervene(fn, modifier) {
   };
 }
 
-function isPromise(obj) {
-  return obj && typeof obj.then === FUNCTION && typeof obj.catch === FUNCTION;
+function thenable(obj) {
+  return obj && typeof obj.then === FUNCTION;
 }
 
-function mapMap(map, selector) {
+function select(map, selector) {
   return Object.keys(map).reduce((newMap, name) => {
     newMap[name] = selector.call(map, map[name], name);
 
     return newMap;
   }, {});
-}
-
-function makeArray(arrayLike) {
-  return [].slice.call(arrayLike);
 }
