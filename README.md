@@ -119,6 +119,6 @@ Contributions
 
 There are few ways you can contribute to this project:
 * Like us? Please [star us](../../stargazers/)
-* Make it even more awesome? Please [send us your wish](https://github.com/compulim/promise-pipe/issues/new/)
-* Don't like how it's doing? Please [file a bug](https://github.com/compulim/promise-pipe/issues/) to us
+* Make it even more awesome? Please [send us your wish](../../issues/new/)
+* Don't like how it's doing? Please [file a bug](../../issues/) to us
   * Please provide a minimal failing test case
