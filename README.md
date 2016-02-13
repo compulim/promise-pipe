@@ -1,6 +1,4 @@
-# promise-pipe
-
-[<img src="https://travis-ci.org/compulim/promise-pipe.svg?branch=master" />](https://travis-ci.org/compulim/promise-pipe)
+# promise-pipe [<img src="https://travis-ci.org/compulim/promise-pipe.svg?branch=master" />](https://travis-ci.org/compulim/promise-pipe)
 
 Background
 ---
@@ -72,7 +70,7 @@ When actions are called, a new Promise object decorated with actions will be ret
   catch: function () { ... }, // native Promise function
   readFile: function () {
     // When the current Promise is resolved, call fs.readFile and return a new Promise
-    // The new Promise instance will also decorate with readFile and decodeBuffer
+    // The new Promise instance will also be decorated with readFile and decodeBuffer
   },
   decodeBuffer: function () { ... }
 }
@@ -96,7 +94,7 @@ const pipe = require('promise-pipe')({
 });
 ```
 
-When the pipe is created by calling `pipe()`, the Promise object returned will be instance of `Q.makePromise`. See [custom-promise-test.js](tree/master/test/custom-promise-test.js) for details.
+When the pipe is created by calling `pipe()`, the Promise object returned will be instance of `Q.makePromise`. See [custom-promise-test.js](test/custom-promise-test.js) for details.
 
 Context
 ---
@@ -113,10 +111,14 @@ const pipe = require('promise-pipe')({
 });
 ```
 
-When `pipe().getContext()` is resolved, it will return `{ hello: 'World!' }`. Note that actions defined with ES6 arrow function do not support "`this`". See [context-test.js](tree/master/test/context-test.js) for details.
+When `pipe().getContext()` is resolved, it will return `{ hello: 'World!' }`. Note that actions defined with ES6 arrow function do not support "`this`". See [context-test.js](test/context-test.js) for details.
 
 
-Contribution
+Contributions
 ---
 
-Please file bugs to [issues](issues). To include your bug as regression test, you are recommended to provide a minimal failing test case.
+There are few ways you can contribute to this project:
+* Like us? Please [star us](../../stargazers/)
+* Make it even more awesome? Please [send us your wish](https://github.com/compulim/promise-pipe/issues/new/)
+* Don't like how it's doing? Please [file a bug](https://github.com/compulim/promise-pipe/issues/) to us
+  * Please provide a minimal failing test case
